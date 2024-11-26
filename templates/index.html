@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <h1>WeatherApp</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <div class="container">
+        <h2>Get the Latest Weather Information</h2>
+        <form method="POST">
+            <label for="city">Enter City Name:</label>
+            <input type="text" id="city" name="city" required placeholder="e.g., New York">
+            <button type="submit">Get Weather</button>
+        </form>
+
+        {% if weather_data %}
+        <div class="weather-info">
+            <h3>Weather in {{ weather_data['name'] }}</h3>
+            <p><strong>Temperature:</strong> {{ weather_data['main']['temp'] }}°C</p>
+            <p><strong>Humidity:</strong> {{ weather_data['main']['humidity'] }}%</p>
+            <p><strong>Condition:</strong> {{ weather_data['weather'][0]['description'] | capitalize }}</p>
+        </div>
+        {% elif weather_data is not none %}
+        <p class="error">City not found. Please try again.</p>
+        {% endif %}
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 WeatherApp. All rights reserved.</p>
+        <p>Contact us at: <a href="mailto:support@weatherapp.com">support@weatherapp.com</a></p>
+    </footer>
+</body>
+</html>
