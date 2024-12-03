@@ -10,6 +10,10 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
     color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 /* Header Styling */
@@ -17,7 +21,12 @@ header {
     background-color: #4CAF50;
     color: white;
     padding: 20px 0;
-    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: space-between; /* Positions logo on the left and nav on the right */
+    align-items: left; /* Vertically centers the content */
 }
 
 header .logo h1 {
@@ -29,11 +38,13 @@ header .logo h1 {
 header nav ul {
     list-style-type: none;
     padding: 0;
+    display: flex; 
+    margin-left: 850px;
+    justify-content: flex-end; 
 }
 
 header nav ul li {
-    display: inline;
-    margin: 0 20px;
+    margin-left: 20px;
 }
 
 header nav ul li a {
@@ -46,14 +57,31 @@ header nav ul li a:hover {
     text-decoration: underline;
 }
 
-/* Main Container */
+/* Main Container */ 
 .container {
-    max-width: 600px;
-    margin: 50px auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 900px;
+    margin-top: 15px;
     padding: 20px;
+}
+
+/* Weather App Section */
+.weather-app {
+    flex: 1;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+}
+
+/* Center the Title */
+.weather-app h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
 }
 
 /* Form Styling */

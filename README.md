@@ -1,23 +1,18 @@
-# Weather App
+# Weather App with User Authentication and MySQL Integration
 
-This is a basic weather app built using Python, Flask, and the OpenWeatherMap API.
+This is a weather app built using Python, Flask, and the OpenWeatherMap API. It also includes user authentication, allowing users to register, log in, and get weather updates for their city. User data is securely stored in a MySQL database.
+
+## Features
+
+- **Weather Information**: Fetches real-time weather data based on the city entered by the user using the OpenWeatherMap API.
+- **User Authentication**: Allows users to register, log in, and log out. User information is stored securely in a MySQL database.
+- **MySQL Database Integration**: User data (username, email, password) is stored and retrieved from a MySQL database.
+- **Environment Configuration**: API key and database credentials are stored securely in a `.env` file.
 
 ## Setup
 
-1. Install the dependencies:
-    ```
-    pip install -r requirements.txt
-    ```
+### 1. Clone the repository
 
-2. Replace the API key in `config.py` with your actual API key from OpenWeatherMap.
-
-3. Run the Flask app:
-    ```
-    python app.py
-    ```
-
-4. Visit `http://127.0.0.1:5000` in your web browser to use the app.
-
-## Features
-- Get current weather by city name.
-- Display temperature, humidity, and weather condition.
+```bash
+git clone https://github.com/your-username/weather-app.git
+cd weather-app
