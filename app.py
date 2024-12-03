@@ -7,13 +7,16 @@ from config import API_KEY, BASE_URL, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, SE
 from setup_server import setup_database
 from datetime import timedelta
 
+# Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30) 
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
+# Initialize Flask-Login
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
+# Database connection function
 def get_db_connection():
     return mysql.connector.connect(
         host=DB_HOST,
@@ -22,26 +25,7 @@ def get_db_connection():
         database=DB_NAME
     )
 
-@app.route('/')
-def home():
-    weather_data = {} 
-    return render_template("index.html", weather_data=weather_data)
-
-app = Flask(__name__)
-app.secret_key = "your_secret_key"
-
-# Initialize LoginManager
-login_manager = LoginManager(app)
-
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
-
-# User loader function
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
-
+# User model class
 class User(UserMixin):
     def __init__(self, id, username, email):
         self.id = id
@@ -61,6 +45,26 @@ class User(UserMixin):
             return User(user_data["id"], user_data["username"], user_data["email"])
         return None
 
+# User loader for Flask-Login
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+
+# Home route with weather fetching functionality
+@app.route("/", methods=["GET", "POST"])
+def home():
+    weather_data = None
+    if request.method == "POST":
+        city = request.form["city"]
+        url = f"{BASE_URL}?q={city}&appid={API_KEY}&units=metric"
+        response = requests.get(url)
+        if response.status_code == 200:
+            weather_data = response.json()
+        else:
+            weather_data = None
+    return render_template("index.html", weather_data=weather_data)
+
+# Signup route
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
@@ -72,7 +76,7 @@ def signup():
         connection = get_db_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
+            cursor.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)", 
                            (username, email, hashed_password))
             connection.commit()
             flash("User successfully created!", "success")
@@ -85,12 +89,13 @@ def signup():
 
     return render_template("signup.html")
 
+# Login route
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        remember = request.form.get("remember")
+        remember = request.form.get("remember", False)
 
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
@@ -108,29 +113,19 @@ def login():
 
     return render_template("login.html")
 
+# Profile route (protected)
 @app.route("/profile")
 @login_required
 def profile():
     return render_template("profile.html", user=current_user)
 
+# Logout route
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
+    flash("You have been logged out.", "info")
     return redirect(url_for("login"))
-
-@app.route("/", methods=["GET", "POST"])
-def home():
-    weather_data = None
-    if request.method == "POST":
-        city = request.form["city"]
-        url = f"{BASE_URL}?q={city}&appid={API_KEY}&units=metric"
-        response = requests.get(url)
-        if response.status_code == 200:
-            weather_data = response.json()
-        else:
-            weather_data = None
-    return render_template("index.html", weather_data=weather_data)
 
 if __name__ == "__main__":
     try:

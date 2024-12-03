@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-     <!-- Header Section -->
-     <header>
+    <!-- Header Section -->
+    <header>
         <div class="header-container">
             <div class="logo">
                 <h1>WeatherApp</h1>
@@ -18,8 +18,8 @@
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li><a href="#signup">Sign Up</a></li>
-                    <li><a href="#login">Login</a></li>
+                    <li><a href="javascript:void(0);" id="signupBtn">Sign Up</a></li>
+                    <li><a href="javascript:void(0);" id="loginBtn">Login</a></li>
                 </ul>
             </nav>
         </div>
@@ -50,10 +50,89 @@
         </div>
     </div>
 
+    <!-- Sign Up & Login Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tablinks active" id="signupTab">Sign Up</button>
+                <button class="tablinks" id="loginTab">Login</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="signupForm" class="tabcontent">
+                <!-- Sign Up Form Content -->
+                <form method="POST" action="{{ url_for('signup') }}">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
+
+            <div id="loginForm" class="tabcontent">
+                <!-- Login Form Content -->
+                <form method="POST" action="{{ url_for('login') }}">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <label for="remember">
+                        <input type="checkbox" name="remember" id="remember"> Remember me
+                    </label>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Section -->
     <footer>
         <p>&copy; 2024 WeatherApp. All rights reserved.</p>
         <p>Contact us at: <a href="mailto:support@weatherapp.com">support@weatherapp.com</a></p>
     </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Open modal when clicking on signup or login buttons
+        document.getElementById("signupBtn").addEventListener("click", function() {
+            document.getElementById("authModal").style.display = "block";
+        });
+
+        document.getElementById("loginBtn").addEventListener("click", function() {
+            document.getElementById("authModal").style.display = "block";
+        });
+
+        // Close modal when clicking the close button
+        document.getElementById("closeModal").addEventListener("click", function() {
+            document.getElementById("authModal").style.display = "none";
+        });
+
+        // Close modal when clicking outside of the modal
+        window.onclick = function(event) {
+            if (event.target === document.getElementById("authModal")) {
+                document.getElementById("authModal").style.display = "none";
+            }
+        };
+
+        // Switch tabs between Sign Up and Login
+        document.getElementById("signupTab").addEventListener("click", function() {
+            document.getElementById("signupForm").style.display = "block";
+            document.getElementById("loginForm").style.display = "none";
+            this.classList.add("active");
+            document.getElementById("loginTab").classList.remove("active");
+        });
+
+        document.getElementById("loginTab").addEventListener("click", function() {
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("signupForm").style.display = "none";
+            this.classList.add("active");
+            document.getElementById("signupTab").classList.remove("active");
+        });
+
+        // Initial state: show the signup form
+        document.getElementById("signupForm").style.display = "block";
+        document.getElementById("loginForm").style.display = "none";
+    </script>
 </body>
 </html>

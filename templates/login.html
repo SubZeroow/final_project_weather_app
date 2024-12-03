@@ -1,8 +1,17 @@
-<form method="POST" action="{{ url_for('login') }}">
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <label for="remember">
-        <input type="checkbox" name="remember" id="remember"> Remember me
-    </label>
-    <button type="submit">Login</button>
-</form>
+<!-- Login Button -->
+<button id="loginBtn">Login</button>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeLogin">&times;</span>
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <label for="remember">
+                <input type="checkbox" name="remember" id="remember"> Remember me
+            </label>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
